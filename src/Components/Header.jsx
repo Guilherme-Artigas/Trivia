@@ -3,7 +3,6 @@ import md5 from 'crypto-js/md5';
 import { connect } from 'react-redux';
 import { string, number } from 'prop-types';
 // import Loading from '../Pages/Loading';
-import { playerGet } from '../utils/requestApi';
 
 class Header extends React.Component {
   componentDidMount() {
@@ -18,7 +17,7 @@ class Header extends React.Component {
 
   showPlayer = async () => {
     const hash = this.createHash();
-    const playerHash = await playerGet(hash);
+    const playerHash = `https://www.gravatar.com/avatar/${hash}`;
     return this.setState({
       hash: playerHash,
     });
