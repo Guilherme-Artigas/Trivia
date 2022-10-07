@@ -44,6 +44,11 @@ class Login extends Component {
     history.push('/trivia');
   };
 
+  settingsScreen = () => {
+    const { history: { push } } = this.props;
+    push('/config');
+  };
+
   render() {
     const { state, handleChange, handleClick } = this;
     const { name, gravatarEmail, isDisabled } = state;
@@ -74,6 +79,13 @@ class Login extends Component {
             onClick={ handleClick }
           >
             Play
+          </button>
+          <button
+            type="button"
+            data-testid="btn-settings"
+            onClick={ this.settingsScreen }
+          >
+            Configurações
           </button>
         </header>
       </div>

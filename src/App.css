@@ -25,6 +25,7 @@ body {
 
   .App-logo {
     animation: shake infinite 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    margin: 50px 0;
   }
 }
 
@@ -37,6 +38,21 @@ body {
   font-size: calc(10px + 2vmin);
   justify-content: center;
   min-height: 100vh;
+}
+
+.App-header input {
+  border: none;
+  border-bottom: 2px solid grey;
+  margin: 1px 0;
+  padding: 10px;
+  width: 200px;
+}
+
+.App-header button {
+  border: none;
+  margin: 1px 0;
+  padding: 10px;
+  width: 220px;
 }
 
 .App-link {
