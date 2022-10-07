@@ -5,6 +5,10 @@ import { string, number } from 'prop-types';
 // import Loading from '../Pages/Loading';
 
 class Header extends React.Component {
+  state = {
+    hash: '',
+  };
+
   componentDidMount() {
     return this.showPlayer();
   }
