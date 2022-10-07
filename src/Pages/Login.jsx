@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { func, shape } from 'prop-types';
 import logo from '../trivia.png';
+
 import '../App.css';
+import getTokenApi from '../utils/requestApi';
+import { saveTokenLocal } from '../utils/localStorage';
+import addUser from '../Redux/Actions';
 
 class Login extends Component {
   state = {
@@ -29,9 +34,15 @@ class Login extends Component {
     }));
   };
 
-  // handleClick = () => {
-
-  // };
+  handleClick = async () => {
+    const { dispatch, history } = this.props;
+    console.log(this.props);
+    const { name, gravatarEmail } = this.state;
+    const token = await getTokenApi();
+    saveTokenLocal(token.token);
+    dispatch(addUser({ name, gravatarEmail }));
+    history.push('/trivia');
+  };
 
   settingsScreen = () => {
     const { history: { push } } = this.props;
@@ -83,11 +94,10 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-  history: PropTypes.shape({ push: PropTypes.func }),
-};
+  dispatch: func,
+  history: shape({
+    push: func,
+  }),
+}.isRequired;
 
-Login.defaultProps = {
-  history: { push: () => {} },
-};
-
-export default Login;
+export default connect()(Login);
