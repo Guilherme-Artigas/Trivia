@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { func, shape } from 'prop-types';
 import logo from '../trivia.png';
+
 import '../App.css';
+import getTokenApi from '../utils/requestApi';
+import { saveTokenLocal } from '../utils/localStorage';
+import addUser from '../Redux/Actions';
 
 class Login extends Component {
   state = {
@@ -28,9 +34,20 @@ class Login extends Component {
     }));
   };
 
-  // handleClick = () => {
+  handleClick = async () => {
+    const { dispatch, history } = this.props;
+    console.log(this.props);
+    const { name, gravatarEmail } = this.state;
+    const token = await getTokenApi();
+    saveTokenLocal(token.token);
+    dispatch(addUser({ name, gravatarEmail }));
+    history.push('/trivia');
+  };
 
-  // };
+  settingsScreen = () => {
+    const { history: { push } } = this.props;
+    push('/config');
+  };
 
   render() {
     const { state, handleChange, handleClick } = this;
@@ -63,10 +80,24 @@ class Login extends Component {
           >
             Play
           </button>
+          <button
+            type="button"
+            data-testid="btn-settings"
+            onClick={ this.settingsScreen }
+          >
+            Configurações
+          </button>
         </header>
       </div>
     );
   }
 }
 
-export default Login;
+Login.propTypes = {
+  dispatch: func,
+  history: shape({
+    push: func,
+  }),
+}.isRequired;
+
+export default connect()(Login);
