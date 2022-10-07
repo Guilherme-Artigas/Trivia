@@ -4,7 +4,7 @@ import { func, shape } from 'prop-types';
 import logo from '../trivia.png';
 
 import '../App.css';
-import getTokenApi from '../utils/requestApi';
+import { getTokenApi } from '../utils/requestApi';
 import { saveTokenLocal } from '../utils/localStorage';
 import addUser from '../Redux/Actions';
 
@@ -36,7 +36,6 @@ class Login extends Component {
 
   handleClick = async () => {
     const { dispatch, history } = this.props;
-    console.log(this.props);
     const { name, gravatarEmail } = this.state;
     const token = await getTokenApi();
     saveTokenLocal(token.token);
