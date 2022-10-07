@@ -1,6 +1,7 @@
 import React from 'react';
 import md5 from 'crypto-js/md5';
 import { connect } from 'react-redux';
+import { string, number } from 'prop-types';
 import Loading from '../Pages/Loading';
 import { playerGet } from '../utils/requestApi';
 
@@ -48,6 +49,12 @@ class Header extends React.Component {
     );
   }
 }
+
+Header.propTypes = {
+  email: string,
+  name: string,
+  score: number,
+}.isRequired;
 
 const mapStateToProps = ({ player }) => ({
   email: player.gravatarEmail,
