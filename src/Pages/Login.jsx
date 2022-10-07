@@ -36,7 +36,6 @@ class Login extends Component {
 
   handleClick = async () => {
     const { dispatch, history } = this.props;
-    console.log(this.props);
     const { name, gravatarEmail } = this.state;
     const token = await getTokenApi();
     saveTokenLocal(token.token);
