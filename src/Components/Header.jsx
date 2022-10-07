@@ -2,13 +2,10 @@ import React from 'react';
 import md5 from 'crypto-js/md5';
 import { connect } from 'react-redux';
 import { string, number } from 'prop-types';
-import Loading from '../Pages/Loading';
+// import Loading from '../Pages/Loading';
 import { playerGet } from '../utils/requestApi';
 
 class Header extends React.Component {
-  state = { loading: true,
-  };
-
   componentDidMount() {
     return this.showPlayer();
   }
@@ -24,24 +21,20 @@ class Header extends React.Component {
     const playerHash = await playerGet(hash);
     return this.setState({
       hash: playerHash,
-      loading: false,
     });
   };
 
   render() {
-    const { loading, hash } = this.state;
+    const { hash } = this.state;
     const { name, score } = this.props;
     return (
       <header data-testid="header-component">
         <div>
-          {loading ? <Loading />
-            : (
-              <img
-                data-testid="header-profile-picture"
-                src={ hash }
-                alt="Gravatar profile"
-              />
-            )}
+          <img
+            data-testid="header-profile-picture"
+            src={ hash }
+            alt="Gravatar profile"
+          />
         </div>
         <h3 data-testid="header-player-name">{name}</h3>
         <h3 data-testid="header-score">{ score }</h3>
