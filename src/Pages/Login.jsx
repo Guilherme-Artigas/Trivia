@@ -40,7 +40,7 @@ class Login extends Component {
     const token = await getTokenApi();
     saveTokenLocal(token.token);
     dispatch(addUser({ name, gravatarEmail }));
-    history.push('/trivia');
+    history.push('/game');
   };
 
   settingsScreen = () => {

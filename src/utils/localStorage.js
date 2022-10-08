@@ -1,5 +1,5 @@
-const saveTokenLocal = (token) => localStorage.setItem('token', JSON.stringify(token));
+const saveTokenLocal = (token) => localStorage.setItem('token', token);
 
-const getTokenLocal = () => JSON.parse(localStorage.getItem('token'));
+const getTokenLocal = () => localStorage.getItem('token');
 
 export { saveTokenLocal, getTokenLocal };

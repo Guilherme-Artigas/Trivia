@@ -17,7 +17,6 @@ const game = (state = INITIAL_STATE, { type, payload }) => {
       loading: true,
     };
   case GET_QUESTIONS:
-    console.log(payload);
     return {
       ...state,
       code: payload.response_code,
