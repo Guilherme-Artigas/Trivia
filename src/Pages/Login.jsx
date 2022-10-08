@@ -4,9 +4,9 @@ import { func, shape } from 'prop-types';
 import logo from '../trivia.png';
 
 import '../App.css';
-import getTokenApi from '../utils/requestApi';
+import { getTokenApi } from '../utils/requestApi';
 import { saveTokenLocal } from '../utils/localStorage';
-import addUser from '../Redux/Actions';
+import { addUser } from '../Redux/Actions';
 
 class Login extends Component {
   state = {
@@ -40,7 +40,7 @@ class Login extends Component {
     const token = await getTokenApi();
     saveTokenLocal(token.token);
     dispatch(addUser({ name, gravatarEmail }));
-    history.push('/trivia');
+    history.push('/game');
   };
 
   settingsScreen = () => {

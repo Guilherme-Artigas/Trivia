@@ -16,7 +16,6 @@ class Trivia extends Component {
   render() {
     const { code, currentQuestion, isLoading } = this.props;
     const invalidToken = 3;
-    console.log(this.props);
     return (
       <>
         <Header />
@@ -83,38 +82,3 @@ const mapStateToProps = ({ game }) => ({
 });
 
 export default connect(mapStateToProps)(Trivia);
-
-// Será validado se o token inválido é excluído e a aplicação é redirecionada
-// Será validado se as respostas da API são tratadas corretamente
-// Será validado se a categoria da pergunta está presente
-// Será validado se o texto da pergunta está presente
-// Será validado se as alternativas estão presentes
-// Será validado se a quantidade de alternativas corretas é 1
-// Será validado se as alternativas estão posicionadas em ordem aleatória
-
-// data-testid="correct-answer"
-// data-testid={ `wrong-answer-${i}` }
-
-// {
-//   "category": "Geography",
-//   "type": "boolean",
-//   "difficulty": "medium",
-//   "question": "Seoul is the capital of North Korea.",
-//   "correct_answer": "False",
-//   "incorrect_answers": [
-//       "True"
-//   ]
-// }
-
-// {
-//   "category": "Entertainment: Video Games",
-//   "type": "multiple",
-//   "difficulty": "hard",
-//   "question": "Which artist composed the original soundtrack for &quot;Watch Dogs 2&quot;?",
-//   "correct_answer": "Hudson Mohawke",
-//   "incorrect_answers": [
-//       "Rustie",
-//       "Machinedrum",
-//       "Flying Lotus"
-//   ]
-// }
