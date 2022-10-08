@@ -1,5 +1,14 @@
-import { ADD_USER } from './actionTypes';
+import { ADD_USER, GET_QUESTIONS, INITIAL_REQUEST } from './actionTypes';
+import { getQuestions } from '../../utils/requestApi';
 
-const addUser = (payload) => ({ type: ADD_USER, payload });
+export const addUser = (payload) => ({ type: ADD_USER, payload });
 
-export default addUser;
+export const initialRequest = () => ({ type: INITIAL_REQUEST });
+
+export const sendQuestions = (payload) => ({ type: GET_QUESTIONS, payload });
+
+export const requestQuestions = (token) => async (dispatch) => {
+  dispatch(initialRequest());
+  const responseAPI = await getQuestions(token);
+  dispatch(sendQuestions(responseAPI));
+};

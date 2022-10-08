@@ -1,84 +1,36 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { func, shape } from 'prop-types';
+import { arrayOf, bool, func, number, shape, string } from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { getTokenLocal } from '../utils/localStorage';
-import { getQuestions } from '../utils/requestApi';
-
-const INVALID_TOKEN = 3;
+import { requestQuestions } from '../Redux/Actions';
 
 class Trivia extends Component {
-  state = {
-    token: '',
-    code: 0,
-    currentQuestion: {},
-    idQuestion: 0,
-    scrambledObject: {},
-  };
-
   componentDidMount() {
-    this.setState({ token: getTokenLocal() }, async () => {
-      const { token, idQuestion } = this.state;
-      const responseAPI = await getQuestions(token);
-      const currentQuestion = responseAPI.results[idQuestion];
-      this.setState({
-        code: responseAPI.response_code,
-        currentQuestion,
-      }, () => {
-        this.shufflesAnswers();
-      });
-    });
+    const { dispatch } = this.props;
+    const token = getTokenLocal();
+    dispatch(requestQuestions(token));
   }
 
-  shufflesAnswers = () => {
-    const { currentQuestion: question } = this.state;
-    const questionObject = {
-      category: question.category,
-      difficulty: question.difficulty,
-      question: question.question,
-      type: question.type,
-      options: [{
-        id: 0,
-        value: question.correct_answer,
-        isCorrect: true,
-      },
-      ...question.incorrect_answers.map((option, index) => ({
-        id: index + 1,
-        value: option,
-        isCorrect: false,
-      }))] };
-    const maximum = 4;
-    const minimum = 2;
-    const size = questionObject.type === 'multiple' ? maximum : minimum;
-    const newList = [];
-    while (newList.length < size) {
-      const randomNumber = Math.floor(Math.random() * size);
-      if (!newList.includes(questionObject.options[randomNumber])) {
-        newList.push(questionObject.options[randomNumber]);
-      }
-    }
-    const scrambledObject = { ...questionObject, options: newList };
-    return this.setState({ scrambledObject });
-  };
-
   render() {
-    const { scrambledObject, code } = this.state;
-
+    const { code, currentQuestion, isLoading } = this.props;
+    const invalidToken = 3;
+    console.log(this.props);
     return (
       <>
         <h1>Game</h1>
         <section>
-          {scrambledObject.options !== undefined && (
+          {code === invalidToken && <Redirect to="/" />}
+          { (isLoading === false && currentQuestion) && (
             <>
               <p data-testid="question-category">
-                {`category: ${scrambledObject.category}`}
+                {`category: ${currentQuestion.category}`}
               </p>
               <p data-testid="question-text">
-                {`question: ${scrambledObject.question}`}
+                {`question: ${currentQuestion.question}`}
               </p>
-              {console.log(scrambledObject)}
               <div data-testid="answer-options">
-                {scrambledObject.options.map(({ value, isCorrect }, i) => (
+                {currentQuestion.options.map(({ value, isCorrect }, i) => (
                   isCorrect ? (
                     <button
                       type="button"
@@ -101,7 +53,6 @@ class Trivia extends Component {
             </>
           )}
         </section>
-        {code === INVALID_TOKEN && <Redirect to="/" />}
       </>
     );
   }
@@ -112,9 +63,25 @@ Trivia.propTypes = {
   history: shape({
     push: func,
   }),
+  code: number,
+  currentQuestion: shape({
+    category: string,
+    question: string,
+    options: arrayOf(shape({
+      id: number,
+      value: string,
+      isCorrect: bool,
+    })),
+  }),
 }.isRequired;
 
-export default connect()(Trivia);
+const mapStateToProps = ({ game }) => ({
+  code: game.code,
+  currentQuestion: game.currentQuestion,
+  isLoading: game.loading,
+});
+
+export default connect(mapStateToProps)(Trivia);
 
 // Será validado se o token inválido é excluído e a aplicação é redirecionada
 // Será validado se as respostas da API são tratadas corretamente

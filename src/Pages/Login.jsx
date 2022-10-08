@@ -6,7 +6,7 @@ import logo from '../trivia.png';
 import '../App.css';
 import { getTokenApi } from '../utils/requestApi';
 import { saveTokenLocal } from '../utils/localStorage';
-import addUser from '../Redux/Actions';
+import { addUser } from '../Redux/Actions';
 
 class Login extends Component {
   state = {
