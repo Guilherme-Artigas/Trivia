@@ -22,7 +22,7 @@ const player = (state = INITIAL_STATE, { type, payload }) => {
     } else {
       sumScore = firstNumber + (payload.timer * easy);
     }
-    return { ...state, score: state.score + sumScore };
+    return { ...state, score: state.score + sumScore, assertions: state.assertions + 1 };
   }
   default:
     return state;
