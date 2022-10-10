@@ -21,7 +21,10 @@ class Trivia extends Component {
     const { dispatch } = this.props;
     const token = getTokenLocal();
     dispatch(requestQuestions(token));
-    this.getCurrentQuestiion();
+    return this.getCurrentQuestiion();
+  }
+
+  stopWatch = () => {
     const decreaseTime = 1000;
     const myInterval = setInterval(() => {
       this.setState((prev) => ({ timer: prev.timer - 1 }), () => {
@@ -30,7 +33,7 @@ class Trivia extends Component {
       });
     }, decreaseTime);
     this.setState({ idTimer: myInterval });
-  }
+  };
 
   procedCheckAnswer = ({ difficulty }, isCorrect) => {
     const { dispatch } = this.props;
@@ -48,7 +51,9 @@ class Trivia extends Component {
     this.setState(() => ({
       currentQuestion: shufflesAnswers(questions[indexQuestionAtual]),
       checkAnswer: false,
+      timer: 30,
     }));
+    this.stopWatch();
   };
 
   getCurrentQuestiion = () => {
@@ -57,7 +62,7 @@ class Trivia extends Component {
     const currentQuestion = questions[indexQuestionAtual];
     return this.setState({
       currentQuestion: shufflesAnswers(currentQuestion),
-    });
+    }, this.stopWatch());
   };
 
   render() {
