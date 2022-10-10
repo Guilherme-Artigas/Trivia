@@ -1,16 +1,26 @@
-import React from 'react';
-import { shape, func } from 'prop-types';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { number, shape, func } from 'prop-types';
 
-class Feedback extends React.Component {
+class Feedback extends Component {
   clickPlayAgain = () => {
     const { history: { push } } = this.props;
     return push('/');
   };
 
   render() {
+    const { assertions } = this.props;
+    const minimumAssertionToBeGreat = 3;
+    const messageSucess = 'Well Done!';
+    const messageMotivational = 'Could be better...';
     return (
-      <>
-        <h1 data-testid="feedback-text">Tela de feedback</h1>
+      <div>
+        <h1>Tela de Feedback</h1>
+        <p data-testid="feedback-text">
+          {assertions >= minimumAssertionToBeGreat
+            ? messageSucess
+            : messageMotivational}
+        </p>
         <button
           type="button"
           onClick={ this.clickPlayAgain }
@@ -18,13 +28,18 @@ class Feedback extends React.Component {
         >
           Play Again
         </button>
-      </>
+      </div>
     );
   }
 }
 
 Feedback.propTypes = {
+  assertions: number,
   history: shape({ push: func }),
-}.isRequeried;
+}.isRequired;
 
-export default Feedback;
+const mapStateToProps = ({ player }) => ({
+  assertions: player.assertions,
+});
+
+export default connect(mapStateToProps)(Feedback);
