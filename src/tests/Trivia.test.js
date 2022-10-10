@@ -1,6 +1,6 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import renderWithRouterAndRedux from './helpers/renderWithRouterAndRedux';
 import App from '../App';
 
@@ -52,16 +52,22 @@ it('Testa se o botão play está desativado caso não passe nos suit test e se h
       expect(button).not.toBeDisabled();  
   })
 
+
+  
   it("Verifica o encaminhamento correto para o jogo ", async() => {
+
     const { history } = renderWithRouterAndRedux(<App />);
+
     const name = screen.getByTestId("input-player-name");
     const email = screen.getByTestId("input-gravatar-email");
-    userEvent.type(email, "igor@gmail.com");
-    userEvent.type(name, "igor");
+
+    userEvent.type(email, "trybe@teste.com");
+    userEvent.type(name, "trybe");
+
     const buttonPlay = screen.getByTestId("btn-play");
+    
     userEvent.click(buttonPlay);
-    await screen.findByText("Jogue");
-    const { location: { pathname }} = history;
-    expect(pathname).toBe("/game");
+    
+    await waitFor(() => expect(history.location.pathname).toBe('/game')) 
   });
 
