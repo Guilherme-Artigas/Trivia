@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { number } from 'prop-types';
+import { number, shape, func } from 'prop-types';
 
 class Feedback extends Component {
+  clickPlayAgain = () => {
+    const { history: { push } } = this.props;
+    return push('/');
+  };
+
   render() {
     const { assertions } = this.props;
     const minimumAssertionToBeGreat = 3;
@@ -16,6 +21,13 @@ class Feedback extends Component {
             ? messageSucess
             : messageMotivational}
         </p>
+        <button
+          type="button"
+          onClick={ this.clickPlayAgain }
+          data-testid="btn-play-again"
+        >
+          Play Again
+        </button>
       </div>
     );
   }
@@ -23,6 +35,7 @@ class Feedback extends Component {
 
 Feedback.propTypes = {
   assertions: number,
+  history: shape({ push: func }),
 }.isRequired;
 
 const mapStateToProps = ({ player }) => ({
