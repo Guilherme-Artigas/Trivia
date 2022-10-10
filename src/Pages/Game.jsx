@@ -44,6 +44,7 @@ class Trivia extends Component {
       <>
         <Header />
         <section>
+          <h1> Jogue </h1>
           <h1>
             {`${timer} segundos restantes.`}
           </h1>
