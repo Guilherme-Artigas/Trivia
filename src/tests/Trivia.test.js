@@ -56,8 +56,8 @@ it('Testa se o botão play está desativado caso não passe nos suit test e se h
     const { history } = renderWithRouterAndRedux(<App />);
     const name = screen.getByTestId("input-player-name");
     const email = screen.getByTestId("input-gravatar-email");
-    userEvent.type(email, "trybe@teste.com");
-    userEvent.type(name, "trybe");
+    userEvent.type(email, "igor@gmail.com");
+    userEvent.type(name, "igor");
     const buttonPlay = screen.getByTestId("btn-play");
     userEvent.click(buttonPlay);
     await screen.findByText("Jogue");
