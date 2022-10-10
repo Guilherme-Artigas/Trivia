@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { number, shape, func } from 'prop-types';
+import Header from '../Components/Header';
 
 class Feedback extends Component {
   clickPlayAgain = () => {
@@ -15,7 +16,7 @@ class Feedback extends Component {
     const messageMotivational = 'Could be better...';
     return (
       <div>
-        <h1>Tela de Feedback</h1>
+        <Header />
         <p data-testid="feedback-text">
           {assertions >= minimumAssertionToBeGreat
             ? messageSucess
