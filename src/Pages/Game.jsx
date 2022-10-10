@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { arrayOf, bool, func, number, shape, string } from 'prop-types';
+import { arrayOf, func, number, shape, string } from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { getTokenLocal } from '../utils/localStorage';
-import { requestQuestions, updateScore } from '../Redux/Actions';
+import { requestQuestions, nextQuestion, updateScore } from '../Redux/Actions';
+import shufflesAnswers from '../utils/randomizer';
 import Header from '../Components/Header';
 
 import './css/Game.css';
@@ -13,12 +14,17 @@ class Trivia extends Component {
     checkAnswer: false,
     timer: 30,
     idTimer: 0,
+    indexQuestionAtual: 0,
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const { dispatch } = this.props;
     const token = getTokenLocal();
-    dispatch(requestQuestions(token));
+    await dispatch(requestQuestions(token));
+    return this.getCurrentQuestion();
+  }
+
+  stopWatch = () => {
     const decreaseTime = 1000;
     const myInterval = setInterval(() => {
       this.setState((prev) => ({ timer: prev.timer - 1 }), () => {
@@ -27,7 +33,7 @@ class Trivia extends Component {
       });
     }, decreaseTime);
     this.setState({ idTimer: myInterval });
-  }
+  };
 
   procedCheckAnswer = ({ difficulty }, isCorrect) => {
     const { dispatch } = this.props;
@@ -37,26 +43,51 @@ class Trivia extends Component {
     if (isCorrect) dispatch(updateScore({ difficulty, timer }));
   };
 
-  render() {
-    const { code, currentQuestion, isLoading } = this.props;
-    const { checkAnswer, timer } = this.state;
-    const invalidToken = 3;
+  handleClickNext = async () => {
+    const { questions, dispatch, history } = this.props;
+    const numeroMaximoDePerguntas = 5;
+    await dispatch(nextQuestion());
+    const { indexQuestionAtual } = this.props;
+    this.setState(() => ({
+      currentQuestion: shufflesAnswers(questions[indexQuestionAtual]),
+      checkAnswer: false,
+      timer: 30,
+    }));
+    this.stopWatch();
+    if (indexQuestionAtual === numeroMaximoDePerguntas) history.push('/feedback');
+  };
 
+  getCurrentQuestion = () => {
+    const { questions } = this.props;
+    const { indexQuestionAtual } = this.state;
+    const currentQuestion = questions[indexQuestionAtual];
+    return this.setState({
+      currentQuestion: shufflesAnswers(currentQuestion),
+    }, this.stopWatch());
+  };
+
+  render() {
+    const { code, isLoading } = this.props;
+    const { checkAnswer, timer, currentQuestion } = this.state;
+    const invalidToken = 3;
+    console.log(currentQuestion);
     return (
       <>
         <Header />
         <section>
-          <h1>
-            {`${timer} segundos restantes.`}
-          </h1>
           {code === invalidToken && <Redirect to="/" />}
           { (isLoading === false && currentQuestion) && (
             <>
-              <p data-testid="question-category">
-                {`category: ${currentQuestion.category}`}
+              <h1>
+                {`${timer} segundos restantes.`}
+              </h1>
+              <p>
+                <span>Category: </span>
+                <span data-testid="question-category">{currentQuestion.category}</span>
               </p>
-              <p data-testid="question-text">
-                {`question: ${currentQuestion.question}`}
+              <p>
+                <span>Question: </span>
+                <span data-testid="question-text">{currentQuestion.question}</span>
               </p>
               <div data-testid="answer-options">
                 {currentQuestion.options.map(({ value, isCorrect }, i) => (
@@ -87,6 +118,16 @@ class Trivia extends Component {
               </div>
             </>
           )}
+          { !!checkAnswer && (
+            <button
+              type="button"
+              data-testid="btn-next"
+              onClick={ this.handleClickNext }
+            >
+              Next
+            </button>
+          ) }
+
         </section>
       </>
     );
@@ -98,20 +139,22 @@ Trivia.propTypes = {
     push: func,
   }),
   code: number,
-  currentQuestion: shape({
-    category: string,
-    question: string,
-    options: arrayOf(shape({
-      id: number,
-      value: string,
-      isCorrect: bool,
-    })),
-  }),
+  questions: arrayOf(
+    shape({
+      category: string,
+      type: string,
+      question: string,
+      incorrect_answers: arrayOf(string),
+      correct_answers: string,
+    }),
+  ),
 }.isRequired;
 
 const mapStateToProps = ({ game }) => ({
   code: game.code,
-  currentQuestion: game.currentQuestion,
+  questions: game.questions,
+  indexQuestionAtual: game.indexQuestionAtual,
+  // currentQuestion: game.currentQuestion,
   isLoading: game.loading,
 });
 
