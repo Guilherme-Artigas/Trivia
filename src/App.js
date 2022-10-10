@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import Config from './Pages/Config';
 import Login from './Pages/Login';
 import Game from './Pages/Game';
+import Feedback from './Pages/Feedback';
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
         <Route exact path="/" render={ (props) => <Login { ...props } /> } />
         <Route path="/game" render={ (props) => <Game { ...props } /> } />
         <Route path="/config" render={ (props) => <Config { ...props } /> } />
+        <Route path="/feedback" render={ (props) => <Feedback { ...props } /> } />
       </Switch>
     </div>
   );

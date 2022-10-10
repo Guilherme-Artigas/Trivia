@@ -17,11 +17,11 @@ class Trivia extends Component {
     indexQuestionAtual: 0,
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const { dispatch } = this.props;
     const token = getTokenLocal();
-    dispatch(requestQuestions(token));
-    return this.getCurrentQuestiion();
+    await dispatch(requestQuestions(token));
+    return this.getCurrentQuestion();
   }
 
   stopWatch = () => {
@@ -43,20 +43,21 @@ class Trivia extends Component {
     if (isCorrect) dispatch(updateScore({ difficulty, timer }));
   };
 
-  handleClickNext = () => {
-    const { questions, indexQuestionAtual, dispatch } = this.props;
-    console.log(indexQuestionAtual);
-    dispatch(nextQuestion());
-    console.log(indexQuestionAtual);
+  handleClickNext = async () => {
+    const { questions, dispatch, history } = this.props;
+    const numeroMaximoDePerguntas = 5;
+    await dispatch(nextQuestion());
+    const { indexQuestionAtual } = this.props;
     this.setState(() => ({
       currentQuestion: shufflesAnswers(questions[indexQuestionAtual]),
       checkAnswer: false,
       timer: 30,
     }));
     this.stopWatch();
+    if (indexQuestionAtual === numeroMaximoDePerguntas) history.push('/feedback');
   };
 
-  getCurrentQuestiion = () => {
+  getCurrentQuestion = () => {
     const { questions } = this.props;
     const { indexQuestionAtual } = this.state;
     const currentQuestion = questions[indexQuestionAtual];
@@ -69,22 +70,24 @@ class Trivia extends Component {
     const { code, isLoading } = this.props;
     const { checkAnswer, timer, currentQuestion } = this.state;
     const invalidToken = 3;
-
+    console.log(currentQuestion);
     return (
       <>
         <Header />
         <section>
-          <h1>
-            {`${timer} segundos restantes.`}
-          </h1>
           {code === invalidToken && <Redirect to="/" />}
           { (isLoading === false && currentQuestion) && (
             <>
-              <p data-testid="question-category">
-                {`category: ${currentQuestion.category}`}
+              <h1>
+                {`${timer} segundos restantes.`}
+              </h1>
+              <p>
+                <span>Category: </span>
+                <span data-testid="question-category">{currentQuestion.category}</span>
               </p>
-              <p data-testid="question-text">
-                {`question: ${currentQuestion.question}`}
+              <p>
+                <span>Question: </span>
+                <span data-testid="question-text">{currentQuestion.question}</span>
               </p>
               <div data-testid="answer-options">
                 {currentQuestion.options.map(({ value, isCorrect }, i) => (
@@ -115,15 +118,16 @@ class Trivia extends Component {
               </div>
             </>
           )}
-          <button
-            type="button"
-            data-testid="btn-next"
-            onClick={ this.handleClickNext }
-            hidden={ !checkAnswer }
-          >
-            Next
+          { !!checkAnswer && (
+            <button
+              type="button"
+              data-testid="btn-next"
+              onClick={ this.handleClickNext }
+            >
+              Next
+            </button>
+          ) }
 
-          </button>
         </section>
       </>
     );
