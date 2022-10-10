@@ -5,13 +5,9 @@ export default class Ranking extends Component {
   render() {
     return (
       <div>
-        <Link to="/">
-          <button
-            type="button"
-            data-testid="btn-go-home"
-          >
-            Inicio
-          </button>
+        <h1 data-testid="ranking-title">Ranking</h1>
+        <Link to="/" data-testid="btn-go-home">
+          Inicio
         </Link>
       </div>
     );
