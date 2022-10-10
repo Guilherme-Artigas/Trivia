@@ -23,13 +23,13 @@ class Trivia extends Component {
     const myInterval = setInterval(() => {
       this.setState((prev) => ({ timer: prev.timer - 1 }), () => {
         const { timer } = this.state;
-        if (timer === 0) this.procedureCheckAnswer();
+        if (timer === 0) this.procedCheckAnswer({ isCorrect: false });
       });
     }, decreaseTime);
     this.setState({ idTimer: myInterval });
   }
 
-  procedCheckAnswer = ({ isCorrect, difficulty }) => {
+  procedCheckAnswer = ({ difficulty }, isCorrect) => {
     const { dispatch } = this.props;
     const { idTimer, timer } = this.state;
     this.setState({ checkAnswer: true });
@@ -38,10 +38,7 @@ class Trivia extends Component {
   };
 
   render() {
-    const {
-      code,
-      currentQuestion: { category, question, difficulty, options },
-      isLoading } = this.props;
+    const { code, currentQuestion, isLoading } = this.props;
     const { checkAnswer, timer } = this.state;
     const invalidToken = 3;
 
@@ -53,23 +50,23 @@ class Trivia extends Component {
             {`${timer} segundos restantes.`}
           </h1>
           {code === invalidToken && <Redirect to="/" />}
-          { !isLoading && (
+          { (isLoading === false && currentQuestion) && (
             <>
               <p data-testid="question-category">
-                {`category: ${category}`}
+                {`category: ${currentQuestion.category}`}
               </p>
               <p data-testid="question-text">
-                {`question: ${question}`}
+                {`question: ${currentQuestion.question}`}
               </p>
               <div data-testid="answer-options">
-                {options.map(({ value, isCorrect }, i) => (
+                {currentQuestion.options.map(({ value, isCorrect }, i) => (
                   isCorrect ? (
                     <button
                       type="button"
                       key={ `answer-${i}` }
                       data-testid="correct-answer"
                       className={ checkAnswer ? 'correct-answer' : undefined }
-                      onClick={ () => this.procedCheckAnswer({ isCorrect, difficulty }) }
+                      onClick={ () => this.procedCheckAnswer(currentQuestion, isCorrect) }
                       disabled={ !!checkAnswer }
                     >
                       {value}
@@ -80,7 +77,7 @@ class Trivia extends Component {
                       key={ `answer-${i}` }
                       data-testid={ `wrong-answer-${i}` }
                       className={ checkAnswer ? 'incorrect-answer' : undefined }
-                      onClick={ () => this.procedCheckAnswer({ isCorrect, difficulty }) }
+                      onClick={ () => this.procedCheckAnswer(currentQuestion, isCorrect) }
                       disabled={ !!checkAnswer }
                     >
                       {value}
