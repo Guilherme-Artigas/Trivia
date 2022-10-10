@@ -11,25 +11,42 @@ import './css/Game.css';
 class Trivia extends Component {
   state = {
     checkAnswer: false,
+    timer: 30,
+    idTimer: 0,
   };
 
   componentDidMount() {
     const { dispatch } = this.props;
     const token = getTokenLocal();
     dispatch(requestQuestions(token));
+    const decreaseTime = 1000;
+    const myInterval = setInterval(() => {
+      this.setState((prev) => ({ timer: prev.timer - 1 }), () => {
+        const { timer } = this.state;
+        if (timer === 0) this.procedureCheckAnswer();
+      });
+    }, decreaseTime);
+    this.setState({ idTimer: myInterval });
   }
 
-  procedureCheckAnswer = () => this.setState({ checkAnswer: true });
+  procedureCheckAnswer = () => {
+    const { idTimer } = this.state;
+    this.setState({ checkAnswer: true });
+    clearInterval(idTimer);
+  };
 
   render() {
     const { code, currentQuestion, isLoading } = this.props;
-    const { checkAnswer } = this.state;
+    const { checkAnswer, timer } = this.state;
     const invalidToken = 3;
 
     return (
       <>
         <Header />
         <section>
+          <h1>
+            {`${timer} segundos restantes.`}
+          </h1>
           {code === invalidToken && <Redirect to="/" />}
           { (isLoading === false && currentQuestion) && (
             <>
@@ -48,6 +65,7 @@ class Trivia extends Component {
                       data-testid="correct-answer"
                       className={ checkAnswer ? 'correct-answer' : undefined }
                       onClick={ this.procedureCheckAnswer }
+                      disabled={ !!checkAnswer }
                     >
                       {value}
                     </button>
@@ -58,6 +76,7 @@ class Trivia extends Component {
                       data-testid={ `wrong-answer-${i}` }
                       className={ checkAnswer ? 'incorrect-answer' : undefined }
                       onClick={ this.procedureCheckAnswer }
+                      disabled={ !!checkAnswer }
                     >
                       {value}
                     </button>
