@@ -70,7 +70,7 @@ class Trivia extends Component {
     const { code, isLoading } = this.props;
     const { checkAnswer, timer, currentQuestion } = this.state;
     const invalidToken = 3;
-    console.log(currentQuestion);
+
     return (
       <>
         <Header />
