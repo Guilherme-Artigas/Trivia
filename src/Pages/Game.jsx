@@ -6,16 +6,26 @@ import { getTokenLocal } from '../utils/localStorage';
 import { requestQuestions } from '../Redux/Actions';
 import Header from '../Components/Header';
 
+import './css/Game.css';
+
 class Trivia extends Component {
+  state = {
+    checkAnswer: false,
+  };
+
   componentDidMount() {
     const { dispatch } = this.props;
     const token = getTokenLocal();
     dispatch(requestQuestions(token));
   }
 
+  procedureCheckAnswer = () => this.setState({ checkAnswer: true });
+
   render() {
     const { code, currentQuestion, isLoading } = this.props;
+    const { checkAnswer } = this.state;
     const invalidToken = 3;
+
     return (
       <>
         <Header />
@@ -36,6 +46,8 @@ class Trivia extends Component {
                       type="button"
                       key={ `answer-${i}` }
                       data-testid="correct-answer"
+                      className={ checkAnswer ? 'correct-answer' : undefined }
+                      onClick={ this.procedureCheckAnswer }
                     >
                       {value}
                     </button>
@@ -44,6 +56,8 @@ class Trivia extends Component {
                       type="button"
                       key={ `answer-${i}` }
                       data-testid={ `wrong-answer-${i}` }
+                      className={ checkAnswer ? 'incorrect-answer' : undefined }
+                      onClick={ this.procedureCheckAnswer }
                     >
                       {value}
                     </button>
@@ -59,7 +73,6 @@ class Trivia extends Component {
 }
 
 Trivia.propTypes = {
-  // dispatch: func,
   history: shape({
     push: func,
   }),
