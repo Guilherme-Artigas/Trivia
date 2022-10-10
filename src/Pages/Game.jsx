@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { arrayOf, func, number, shape, string } from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { getTokenLocal } from '../utils/localStorage';
-import { requestQuestions, nextQuestion } from '../Redux/Actions';
+import { requestQuestions, nextQuestion, updateScore } from '../Redux/Actions';
 import shufflesAnswers from '../utils/randomizer';
 import Header from '../Components/Header';
 
@@ -26,16 +26,18 @@ class Trivia extends Component {
     const myInterval = setInterval(() => {
       this.setState((prev) => ({ timer: prev.timer - 1 }), () => {
         const { timer } = this.state;
-        if (timer === 0) this.procedureCheckAnswer();
+        if (timer === 0) this.procedCheckAnswer({ isCorrect: false });
       });
     }, decreaseTime);
     this.setState({ idTimer: myInterval });
   }
 
-  procedureCheckAnswer = () => {
-    const { idTimer } = this.state;
+  procedCheckAnswer = ({ difficulty }, isCorrect) => {
+    const { dispatch } = this.props;
+    const { idTimer, timer } = this.state;
     this.setState({ checkAnswer: true });
     clearInterval(idTimer);
+    if (isCorrect) dispatch(updateScore({ difficulty, timer }));
   };
 
   handleClickNext = () => {
@@ -87,7 +89,7 @@ class Trivia extends Component {
                       key={ `answer-${i}` }
                       data-testid="correct-answer"
                       className={ checkAnswer ? 'correct-answer' : undefined }
-                      onClick={ this.procedureCheckAnswer }
+                      onClick={ () => this.procedCheckAnswer(currentQuestion, isCorrect) }
                       disabled={ !!checkAnswer }
                     >
                       {value}
@@ -98,7 +100,7 @@ class Trivia extends Component {
                       key={ `answer-${i}` }
                       data-testid={ `wrong-answer-${i}` }
                       className={ checkAnswer ? 'incorrect-answer' : undefined }
-                      onClick={ this.procedureCheckAnswer }
+                      onClick={ () => this.procedCheckAnswer(currentQuestion, isCorrect) }
                       disabled={ !!checkAnswer }
                     >
                       {value}
