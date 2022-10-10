@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { arrayOf, bool, func, number, shape, string } from 'prop-types';
+import { arrayOf, func, number, shape, string } from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { getTokenLocal } from '../utils/localStorage';
-import { requestQuestions } from '../Redux/Actions';
+import { requestQuestions, nextQuestion } from '../Redux/Actions';
+import shufflesAnswers from '../utils/randomizer';
 import Header from '../Components/Header';
 
 import './css/Game.css';
@@ -13,12 +14,14 @@ class Trivia extends Component {
     checkAnswer: false,
     timer: 30,
     idTimer: 0,
+    indexQuestionAtual: 0,
   };
 
   componentDidMount() {
     const { dispatch } = this.props;
     const token = getTokenLocal();
     dispatch(requestQuestions(token));
+    this.getCurrentQuestiion();
     const decreaseTime = 1000;
     const myInterval = setInterval(() => {
       this.setState((prev) => ({ timer: prev.timer - 1 }), () => {
@@ -35,9 +38,29 @@ class Trivia extends Component {
     clearInterval(idTimer);
   };
 
+  handleClickNext = () => {
+    const { questions, indexQuestionAtual, dispatch } = this.props;
+    console.log(indexQuestionAtual);
+    dispatch(nextQuestion());
+    console.log(indexQuestionAtual);
+    this.setState(() => ({
+      currentQuestion: shufflesAnswers(questions[indexQuestionAtual]),
+      checkAnswer: false,
+    }));
+  };
+
+  getCurrentQuestiion = () => {
+    const { questions } = this.props;
+    const { indexQuestionAtual } = this.state;
+    const currentQuestion = questions[indexQuestionAtual];
+    return this.setState({
+      currentQuestion: shufflesAnswers(currentQuestion),
+    });
+  };
+
   render() {
-    const { code, currentQuestion, isLoading } = this.props;
-    const { checkAnswer, timer } = this.state;
+    const { code, isLoading } = this.props;
+    const { checkAnswer, timer, currentQuestion } = this.state;
     const invalidToken = 3;
 
     return (
@@ -85,6 +108,15 @@ class Trivia extends Component {
               </div>
             </>
           )}
+          <button
+            type="button"
+            data-testid="btn-next"
+            onClick={ this.handleClickNext }
+            hidden={ !checkAnswer }
+          >
+            Next
+
+          </button>
         </section>
       </>
     );
@@ -96,20 +128,22 @@ Trivia.propTypes = {
     push: func,
   }),
   code: number,
-  currentQuestion: shape({
-    category: string,
-    question: string,
-    options: arrayOf(shape({
-      id: number,
-      value: string,
-      isCorrect: bool,
-    })),
-  }),
+  questions: arrayOf(
+    shape({
+      category: string,
+      type: string,
+      question: string,
+      incorrect_answers: arrayOf(string),
+      correct_answers: string,
+    }),
+  ),
 }.isRequired;
 
 const mapStateToProps = ({ game }) => ({
   code: game.code,
-  currentQuestion: game.currentQuestion,
+  questions: game.questions,
+  indexQuestionAtual: game.indexQuestionAtual,
+  // currentQuestion: game.currentQuestion,
   isLoading: game.loading,
 });
 
