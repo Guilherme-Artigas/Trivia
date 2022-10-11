@@ -33,9 +33,6 @@ class Feedback extends Component {
             ? messageSucess
             : messageMotivational}
         </p>
-        <Link to="/" data-testid="btn-play-again">
-          Play Again
-        </Link>
         <button
           type="button"
           data-testid="btn-play-again"

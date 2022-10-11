@@ -2,7 +2,7 @@ import {
   GET_QUESTIONS,
   INITIAL_REQUEST,
   NEXT_QUESTION,
-  RESET_GAME,
+  RESET_INDEX,
 } from '../Actions/actionTypes';
 import shufflesAnswers from '../../utils/randomizer';
 
@@ -37,7 +37,7 @@ const game = (state = INITIAL_STATE, { type, payload }) => {
       ),
       loading: false,
     };
-  case RESET_GAME:
+  case RESET_INDEX:
     return {
       ...state,
       indexQuestionAtual: 0,
