@@ -13,11 +13,13 @@ class Feedback extends Component {
     return (
       <div>
         <Header />
-        <h1>Final Score:
-          <p data-testid='feedback-total-score' >{ score }</p>
+        <h1>
+          Final Score:
+          <p data-testid="feedback-total-score">{ score }</p>
         </h1>
-        <h2>Assertions:
-          <p data-testid='feedback-total-question'>{ assertions}</p>
+        <h2>
+          Assertions:
+          <p data-testid="feedback-total-question">{ assertions }</p>
         </h2>
         <p data-testid="feedback-text">
           {assertions >= minimumAssertionToBeGreat
@@ -43,7 +45,7 @@ Feedback.propTypes = {
 
 const mapStateToProps = ({ player }) => ({
   assertions: player.assertions,
-  score: player.score
+  score: player.score,
 });
 
 export default connect(mapStateToProps)(Feedback);
