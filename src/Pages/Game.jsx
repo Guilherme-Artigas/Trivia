@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { arrayOf, func, number, shape, string } from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import { getTokenLocal } from '../utils/localStorage';
+import { getTokenLocal, saveInfoScorePlayer } from '../utils/localStorage';
 import { requestQuestions, nextQuestion, updateScore } from '../Redux/Actions';
 import shufflesAnswers from '../utils/randomizer';
 import Header from '../Components/Header';
@@ -44,7 +44,7 @@ class Trivia extends Component {
   };
 
   handleClickNext = async () => {
-    const { questions, dispatch, history } = this.props;
+    const { questions, dispatch, history, name, score, gravatarEmail } = this.props;
     const numeroMaximoDePerguntas = 5;
     await dispatch(nextQuestion());
     const { indexQuestionAtual } = this.props;
@@ -54,7 +54,10 @@ class Trivia extends Component {
       timer: 30,
     }));
     this.stopWatch();
-    if (indexQuestionAtual === numeroMaximoDePerguntas) history.push('/feedback');
+    if (indexQuestionAtual === numeroMaximoDePerguntas) {
+      saveInfoScorePlayer({ name, score, gravatarEmail });
+      history.push('/feedback');
+    }
   };
 
   getCurrentQuestion = () => {
@@ -150,11 +153,13 @@ Trivia.propTypes = {
   ),
 }.isRequired;
 
-const mapStateToProps = ({ game }) => ({
+const mapStateToProps = ({ game, player }) => ({
   code: game.code,
   questions: game.questions,
   indexQuestionAtual: game.indexQuestionAtual,
-  // currentQuestion: game.currentQuestion,
+  score: player.score,
+  name: player.name,
+  gravatarEmail: player.gravatarEmail,
   isLoading: game.loading,
 });
 

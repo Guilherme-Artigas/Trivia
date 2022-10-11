@@ -27,7 +27,7 @@ expect(button).toBeInTheDocument();
 })
 it('Testa se o botao config está na tela',()=>{
   const { history } = renderWithRouterAndRedux(<App/>);
-  const button = screen.getByRole('button', { name: /configurações/i });
+  const button = screen.getByRole('link', { name: /configurações/i });
 userEvent.click(button);
 
 const { location: { pathname } } = history;
@@ -62,7 +62,9 @@ it('Testa se o botão play está desativado caso não passe nos suit test e se h
     const email = screen.getByTestId("input-gravatar-email");
 
     userEvent.type(email, "trybe@teste.com");
+    expect(email).toHaveValue("trybe@teste.com")
     userEvent.type(name, "trybe");
+    expect(name).toHaveValue("trybe")
 
     const buttonPlay = screen.getByTestId("btn-play");
     
@@ -70,4 +72,3 @@ it('Testa se o botão play está desativado caso não passe nos suit test e se h
     
     await waitFor(() => expect(history.location.pathname).toBe('/game')) 
   });
-
