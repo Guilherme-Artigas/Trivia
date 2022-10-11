@@ -45,16 +45,36 @@ it('a pergunta aparece corretamente.', async ()=>{
   
   });
 
+  it('o funcionamento da resposta incorreta', async ()=>{
+
+    const question = await screen.findByTestId('question-text');
+    expect(question).toBeInTheDocument()
   
+    const incorrectAnswer = screen.getAllByTestId(/wrong-answer-/i);
+    expect(incorrectAnswer[0]).toBeInTheDocument();
+
+    userEvent.click(incorrectAnswer[0]);
+    expect(incorrectAnswer[0].className).toBe('incorrect-answer')
+
+    // const wrongAnswer = screen.getAllByTestId(/wrong-answer-/i);
+    // wrongAnswer.forEach((element) => {
+    //     expect(element).toBeInTheDocument();
+    //     expect(element.className).toBe('incorrect-answer')
+    // })
+   
+    const nextBtn = screen.getByRole('button', {  name: /next/i});
+    expect(nextBtn).toBeInTheDocument();
+  
+  });
+
   jest.setTimeout(40000);
   it('se o cronômetro funciona corretamente', async () => {
 
     const nextBtn = await screen.findByRole('button', {  name: /next/i}, {timeout:35000});
     expect(nextBtn).toBeInTheDocument();
 
-    userEvent.click(nextBtn);
-
-    const stopWatch = screen.getByRole('heading', {  name: /30 segundos restantes\./i});
+    
+    const stopWatch = screen.getByRole('heading', {  name: /0 segundos restantes\./i});
     expect(stopWatch).toBeInTheDocument();
 
 })
