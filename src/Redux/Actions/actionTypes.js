@@ -4,3 +4,4 @@ export const GET_QUESTIONS = 'GET_QUESTIONS';
 export const INITIAL_REQUEST = 'INITIAL_REQUEST';
 export const NEXT_QUESTION = 'NEXT_QUESTION';
 export const UPDATE_SCORE = 'UPDATE_SCORE';
+export const RESET_GAME = 'RESET_GAME';

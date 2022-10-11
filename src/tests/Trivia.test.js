@@ -70,4 +70,3 @@ it('Testa se o botão play está desativado caso não passe nos suit test e se h
     
     await waitFor(() => expect(history.location.pathname).toBe('/game')) 
   });
-

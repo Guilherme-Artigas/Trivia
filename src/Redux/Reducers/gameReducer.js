@@ -1,4 +1,9 @@
-import { GET_QUESTIONS, INITIAL_REQUEST, NEXT_QUESTION } from '../Actions/actionTypes';
+import {
+  GET_QUESTIONS,
+  INITIAL_REQUEST,
+  NEXT_QUESTION,
+  RESET_GAME,
+} from '../Actions/actionTypes';
 import shufflesAnswers from '../../utils/randomizer';
 
 const INITIAL_STATE = {
@@ -31,6 +36,11 @@ const game = (state = INITIAL_STATE, { type, payload }) => {
         payload.results[state.indexQuestionAtual],
       ),
       loading: false,
+    };
+  case RESET_GAME:
+    return {
+      ...state,
+      indexQuestionAtual: 0,
     };
   default:
     return state;

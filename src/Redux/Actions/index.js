@@ -3,6 +3,7 @@ import {
   GET_QUESTIONS,
   INITIAL_REQUEST,
   NEXT_QUESTION,
+  RESET_GAME,
   UPDATE_SCORE,
 } from './actionTypes';
 
@@ -17,6 +18,8 @@ export const sendQuestions = (payload) => ({ type: GET_QUESTIONS, payload });
 export const nextQuestion = () => ({ type: NEXT_QUESTION });
 
 export const updateScore = (payload) => ({ type: UPDATE_SCORE, payload });
+
+export const resetGame = () => ({ type: RESET_GAME });
 
 export const requestQuestions = (token) => async (dispatch) => {
   dispatch(initialRequest());
