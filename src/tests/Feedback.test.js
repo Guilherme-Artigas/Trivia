@@ -1,6 +1,5 @@
 import React from 'react';
-import userEvent from '@testing-library/user-event';
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import renderWithRouterAndRedux from './helpers/renderWithRouterAndRedux';
 import Feedback from '../Pages/Feedback';
 
@@ -23,17 +22,24 @@ describe('Verificando funcionalidades da página de Feedbacks:', () => {
     expect(btnRanking).toBeInTheDocument();
   })
 
-  it('', async () => {
+  it('A mensagem a ser exibida caso o jogador acerte menos de três perguntas deve ser "Could be better..."', async () => {
     const { history } = renderWithRouterAndRedux(<Feedback />)
     let { location: { pathname } } = history;
     pathname = '/feedback';
 
-    const btnPlayAgain = screen.getByRole('link', { name: /play again/i });
-    const btnRanking = screen.getByRole('link', { name: /ranking/i });
+    const score = screen.getByTestId('header-score');
+    const feedText = screen.getByTestId('feedback-text');
 
-    await userEvent.click(btnPlayAgain);
-    console.log(pathname);
-    // pathname = '/';
-    // expect(pathname).toBe('/');
+    expect(score).toHaveTextContent(0);
+    expect(feedText).toHaveTextContent('Could be better...');
+  })
+
+  it('A mensagem a ser exibida caso o jogador acerte trêsn ou mais perguntas deve ser "Well Done!"', async () => {
+    const { history, store } = renderWithRouterAndRedux(<Feedback />, { player: { assertions: 4 } } )
+    let { location: { pathname } } = history;
+    pathname = '/feedback';
+    
+    const feedText = screen.getByTestId('feedback-text');
+    expect(feedText).toHaveTextContent('Well Done!');
   })
 })
