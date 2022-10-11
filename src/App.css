@@ -48,6 +48,18 @@ body {
   width: 200px;
 }
 
+a {
+  background-color: white;
+  border: none;
+  font-size: 13.33px;
+  height: 15px;
+  margin: 1px 0;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  width: 200px;
+}
+
 .App-header button {
   border: none;
   margin: 1px 0;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { func, shape } from 'prop-types';
+import { Link } from 'react-router-dom';
 import logo from '../trivia.png';
 
 import '../App.css';
@@ -43,11 +44,6 @@ class Login extends Component {
     history.push('/game');
   };
 
-  settingsScreen = () => {
-    const { history: { push } } = this.props;
-    push('/config');
-  };
-
   render() {
     const { state, handleChange, handleClick } = this;
     const { name, gravatarEmail, isDisabled } = state;
@@ -79,13 +75,9 @@ class Login extends Component {
           >
             Play
           </button>
-          <button
-            type="button"
-            data-testid="btn-settings"
-            onClick={ this.settingsScreen }
-          >
+          <Link to="/config" data-testid="btn-settings">
             Configurações
-          </button>
+          </Link>
         </header>
       </div>
     );
