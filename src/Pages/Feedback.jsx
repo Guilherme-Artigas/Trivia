@@ -3,8 +3,15 @@ import { connect } from 'react-redux';
 import { number, shape, func } from 'prop-types';
 import { Link } from 'react-router-dom';
 import Header from '../Components/Header';
+import { resetGame } from '../Redux/Actions';
 
 class Feedback extends Component {
+  toPlayAgain = async () => {
+    const { history: { push }, dispatch } = this.props;
+    await dispatch(resetGame());
+    push('/');
+  };
+
   render() {
     const { assertions, score } = this.props;
     const minimumAssertionToBeGreat = 3;
@@ -26,9 +33,13 @@ class Feedback extends Component {
             ? messageSucess
             : messageMotivational}
         </p>
-        <Link to="/" data-testid="btn-play-again">
+        <button
+          type="button"
+          data-testid="btn-play-again"
+          onClick={ this.toPlayAgain }
+        >
           Play Again
-        </Link>
+        </button>
         <Link to="/ranking" data-testid="btn-ranking">
           Ranking
         </Link>
@@ -41,6 +52,7 @@ Feedback.propTypes = {
   assertions: number,
   score: number,
   history: shape({ push: func }),
+  dispatch: func,
 }.isRequired;
 
 const mapStateToProps = ({ player }) => ({
