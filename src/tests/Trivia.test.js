@@ -27,7 +27,7 @@ expect(button).toBeInTheDocument();
 })
 it('Testa se o botao config está na tela',()=>{
   const { history } = renderWithRouterAndRedux(<App/>);
-  const button = screen.getByRole('button', { name: /configurações/i });
+  const button = screen.getByRole('link', { name: /configurações/i });
 userEvent.click(button);
 
 const { location: { pathname } } = history;

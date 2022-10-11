@@ -15,7 +15,7 @@ class Ranking extends Component {
   }
 
   reorganizedRank = () => {
-    const rankList = getInfoScorePlayer() || [];
+    const rankList = getInfoScorePlayer();
     const listUserRanks = rankList.sort((a, b) => b.score - a.score);
     this.setState({
       listUserRanks,
