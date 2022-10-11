@@ -20,7 +20,7 @@ class CardPlayer extends Component {
     const { src } = this.state;
     return (
       <div>
-        <img src={ src } alt="Imagem de perfil gravatar" />
+        <img src={ src } alt={ `Imagem de perfil gravatar-${name}` } />
         <p data-testid={ `player-name-${index}` }>{ name }</p>
         <p data-testid={ `player-score-${index}` }>{ score }</p>
       </div>
