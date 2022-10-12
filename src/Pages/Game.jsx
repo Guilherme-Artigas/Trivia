@@ -66,7 +66,7 @@ class Trivia extends Component {
     const currentQuestion = questions[indexQuestionAtual];
     return this.setState({
       currentQuestion: shufflesAnswers(currentQuestion),
-    }, this.stopWatch());
+    }, this.stopWatch);
   };
 
   render() {

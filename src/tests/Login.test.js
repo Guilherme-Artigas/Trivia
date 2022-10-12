@@ -53,7 +53,7 @@ it('Testa se o botão play está desativado caso não passe nos suit test e se h
   })
 
 
-  
+  jest.setTimeout(15000)
   it("Verifica o encaminhamento correto para o jogo ", async() => {
 
     const { history } = renderWithRouterAndRedux(<App />);
@@ -70,5 +70,5 @@ it('Testa se o botão play está desativado caso não passe nos suit test e se h
     
     userEvent.click(buttonPlay);
     
-    await waitFor(() => expect(history.location.pathname).toBe('/game')) 
+    await waitFor(() => expect(history.location.pathname).toBe('/game'), { timeout: 10000 }) 
   });
