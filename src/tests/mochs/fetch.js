@@ -1,7 +1,7 @@
-const { tokenResponse, invalidTokenResponse } = require("./token");
-const { questionsResponse, invalidTokenQuestionsResponse } = require("./questions");
+import { tokenResponse, invalidTokenResponse } from "./token";
+import { questionsResponse, invalidTokenQuestionsResponse } from "./questions";
 
-const mockFetchWithToken = ({simulateExpiredToken} = {simulateExpiredToken: false}) => {
+const mockFetchWithToken = ( {simulateExpiredToken} = {simulateExpiredToken: false}) => {
   return (url) => {
     const urls = {
       "https://opentdb.com/api_token.php?command=request": () => {
@@ -23,12 +23,8 @@ const mockFetchWithToken = ({simulateExpiredToken} = {simulateExpiredToken: fals
   }
 }
 
-
-
-
-
-
-
 const fetch = mockFetchWithToken();
 
-module.exports = { fetch, mockFetchWithToken };
+const fetchInvalido = mockFetchWithToken({simulateExpiredToken: true})
+
+export { fetch, fetchInvalido };
