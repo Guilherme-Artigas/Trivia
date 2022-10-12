@@ -4,13 +4,11 @@ import {
   NEXT_QUESTION,
   RESET_INDEX,
 } from '../Actions/actionTypes';
-import shufflesAnswers from '../../utils/randomizer';
 
 const INITIAL_STATE = {
   loading: true,
   code: 0,
   questions: [],
-  currentQuestion: {},
   indexQuestionAtual: 0,
 };
 
@@ -32,9 +30,6 @@ const game = (state = INITIAL_STATE, { type, payload }) => {
       ...state,
       code: payload.response_code,
       questions: payload.results,
-      currentQuestion: shufflesAnswers(
-        payload.results[state.indexQuestionAtual],
-      ),
       loading: false,
     };
   case RESET_INDEX:

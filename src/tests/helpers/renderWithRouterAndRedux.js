@@ -8,8 +8,8 @@ import thunk from 'redux-thunk';
 import reducer from '../../Redux/Reducers';
 
 export const renderWithRouterAndRedux = (component, route = '/', initialState) => {
-  const store = createStore(reducer, initialState, applyMiddleware(thunk));
   const history = createMemoryHistory({ initialEntries: [route] });
+  const store = createStore(reducer, initialState, applyMiddleware(thunk));
 
   return {
     ...render(

@@ -42,6 +42,11 @@ it('a pergunta aparece corretamente.', async ()=>{
    
     const nextBtn = screen.getByRole('button', {  name: /next/i});
     expect(nextBtn).toBeInTheDocument();
+
+    userEvent.click(nextBtn)
+    const correctAnswer2 = screen.getByTestId("correct-answer");
+    expect(correctAnswer).toHaveClass('correct-answer')
+
   
   });
 
@@ -56,12 +61,6 @@ it('a pergunta aparece corretamente.', async ()=>{
     userEvent.click(incorrectAnswer[0]);
     expect(incorrectAnswer[0].className).toBe('incorrect-answer')
 
-    // const wrongAnswer = screen.getAllByTestId(/wrong-answer-/i);
-    // wrongAnswer.forEach((element) => {
-    //     expect(element).toBeInTheDocument();
-    //     expect(element.className).toBe('incorrect-answer')
-    // })
-   
     const nextBtn = screen.getByRole('button', {  name: /next/i});
     expect(nextBtn).toBeInTheDocument();
   
@@ -73,10 +72,18 @@ it('a pergunta aparece corretamente.', async ()=>{
     const nextBtn = await screen.findByRole('button', {  name: /next/i}, {timeout:35000});
     expect(nextBtn).toBeInTheDocument();
 
-    
     const stopWatch = screen.getByRole('heading', {  name: /0 segundos restantes\./i});
     expect(stopWatch).toBeInTheDocument();
 
+    const correctAnswer = screen.getByTestId("correct-answer");
+    expect(correctAnswer).toBeInTheDocument();
+    expect(correctAnswer).toHaveClass("correct-answer");
+
+    const wrongAnswer = screen.getAllByTestId(/wrong-answer-/i);
+    wrongAnswer.forEach((element) => {
+        expect(element).toBeInTheDocument();
+        expect(element.className).toBe('incorrect-answer')
+    })
 })
 
 })
