@@ -22,8 +22,7 @@ const game = (state = INITIAL_STATE, { type, payload }) => {
   case NEXT_QUESTION:
     return {
       ...state,
-      indexQuestionAtual: state.indexQuestionAtual < state.questions.length
-        ? state.indexQuestionAtual + 1 : state.questions.length - 1,
+      indexQuestionAtual: state.indexQuestionAtual + 1,
     };
   case GET_QUESTIONS:
     return {
