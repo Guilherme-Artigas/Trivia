@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { screen, waitFor } from '@testing-library/react';
 import renderWithRouterAndRedux from './helpers/renderWithRouterAndRedux';
 import App from '../App';
-import { fetch } from './mochs/fetch'
+import { fetch, fetchInvalido } from './mochs/fetch'
 
 
 describe('Testes se na tela Game:',()=>{
@@ -46,11 +46,14 @@ describe('Testes se na tela Game:',()=>{
       const nextBtn1 = screen.getByRole('button', {  name: /next/i});
       expect(nextBtn1).toBeInTheDocument();
   
-      userEvent.click(nextBtn1)
+      userEvent.click(nextBtn1)  
+
+      expect(question1.textContent).not.toBe('');
     }, { timeout: 10000})
       
     await waitFor(() => {
       const question2 = screen.getByTestId("question-text");
+      expect(question2.textContent).not.toBe('The Republic of Malta is the smallest microstate worldwide.');
       expect(question2).toBeInTheDocument()
 
       const correctAnswer2 = screen.getByTestId("correct-answer");
@@ -73,6 +76,7 @@ describe('Testes se na tela Game:',()=>{
 
     await waitFor(() => {
       const question3 = screen.getByTestId("question-text");
+      expect(question3.textContent).not.toBe('In quantum physics, which of these theorised sub-atomic particles has yet to be observed?');
       expect(question3).toBeInTheDocument()
 
       const correctAnswer3 = screen.getByTestId("correct-answer");
@@ -94,6 +98,7 @@ describe('Testes se na tela Game:',()=>{
 
     await waitFor(() => {
       const question4 = screen.getByTestId("question-text");
+      expect(question4.textContent).not.toBe('Generally, which component of a computer draws the most power?');
       expect(question4).toBeInTheDocument()
 
       const correctAnswer4 = screen.getByTestId("correct-answer");
@@ -115,6 +120,7 @@ describe('Testes se na tela Game:',()=>{
 
     await waitFor(() => {
       const question5 = screen.getByTestId("question-text");
+      expect(question5.textContent).not.toBe('What is the most expensive weapon in Counter-Strike: Global Offensive?');
       expect(question5).toBeInTheDocument()
 
       const correctAnswer5 = screen.getByTestId("correct-answer");
@@ -171,5 +177,27 @@ describe('Testes se na tela Game:',()=>{
         expect(element).toBeInTheDocument();
         expect(element.className).toBe('incorrect-answer')
     })
+  })
+})
+
+describe('aa', () => {
+  it('', async () => {
+    global.fetch = fetchInvalido;
+
+    const { history } = renderWithRouterAndRedux(<App />);
+
+    const name = screen.getByTestId("input-player-name");
+    const email = screen.getByTestId("input-gravatar-email");
+
+    userEvent.type(email, "trybe@teste.com");
+    expect(email).toHaveValue("trybe@teste.com")
+    userEvent.type(name, "trybe");
+    expect(name).toHaveValue("trybe")
+
+    const buttonPlay = screen.getByTestId("btn-play");
+
+    userEvent.click(buttonPlay);
+    
+    await waitFor(() => expect(history.location.pathname).toBe('/game'), { timeout: 15000}) 
   })
 })
