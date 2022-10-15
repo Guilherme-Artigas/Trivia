@@ -26,13 +26,8 @@ class Login extends Component {
   verifyForm = () => {
     const { name, gravatarEmail } = this.state;
     const regexVerifyEmail = /\S+@\S+\.\S+/;
-    const verifyEmail = regexVerifyEmail.test(gravatarEmail)
-    && gravatarEmail.endsWith('.com');
-    const verifyName = name.length !== 0;
-
-    return (verifyEmail && verifyName) && this.setState((prev) => ({
-      isDisabled: !prev.isDisabled,
-    }));
+    const verifyEmail = regexVerifyEmail.test(gravatarEmail);
+    return this.setState({ isDisabled: !(verifyEmail && name !== '') });
   };
 
   handleClick = async () => {

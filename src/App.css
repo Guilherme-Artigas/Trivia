@@ -1,5 +1,6 @@
 body {
   box-sizing: border-box;
+  font-family: Courier New , Courier , monospace;
   margin: 0;
   padding: 0;
 }
@@ -61,10 +62,26 @@ a {
 }
 
 .App-header button {
+  background-color: dodgerblue;
+  border: none;
+  color: white;
+  margin: 1px 0;
+  padding: 10px;
+  transition: 1s;
+  width: 220px;
+}
+
+.App-header button:disabled {
+  background-color: lightgray;
   border: none;
   margin: 1px 0;
   padding: 10px;
+  transition: 1s;
   width: 220px;
+}
+
+.App-header a {
+  color: black;
 }
 
 .App-link {
