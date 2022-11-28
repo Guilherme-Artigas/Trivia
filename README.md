@@ -10,7 +10,7 @@ Bem vindo ao repositório do **Jogo Trivia**.
 
 ## Introdução 😀
 
-O objetivo aqui, foi colocar em prática tudo o que você aprendei sobre **React** e **Redux**, enquanto praticava a organização de um projeto em equipe com a metodologia agile **Kanban**. Projetos raramente são individuais. Eles são sempre o resultado do esforço conjunto de um time que precisa gerenciar demandas mais e menos prioritárias, que dependem umas das outras para entregar um produto rápido e bem feito.
+O objetivo aqui, foi colocar em prática tudo o que aprendi sobre **React** e **Redux**, enquanto praticava a organização de um projeto em equipe com a metodologia agile **Kanban**. Projetos raramente são individuais. Eles são sempre o resultado do esforço conjunto de um time que precisa gerenciar demandas mais e menos prioritárias, que dependem umas das outras para entregar um produto rápido e bem feito.
 
 ## Caracteristicas/Funcionalidades 🪛
 
