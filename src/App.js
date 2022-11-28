@@ -10,7 +10,7 @@ export default function App() {
   return (
     <div>
       <Switch>
-        <Route exact path="/" render={ (props) => <Login { ...props } /> } />
+        <Route exact path="/Trivia" render={ (props) => <Login { ...props } /> } />
         <Route path="/game" render={ (props) => <Game { ...props } /> } />
         <Route path="/config" render={ (props) => <Config { ...props } /> } />
         <Route path="/feedback" render={ (props) => <Feedback { ...props } /> } />

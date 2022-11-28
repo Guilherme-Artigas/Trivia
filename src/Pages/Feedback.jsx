@@ -9,7 +9,7 @@ class Feedback extends Component {
   toPlayAgain = async () => {
     const { history: { push }, dispatch } = this.props;
     await dispatch(resetGame());
-    push('/');
+    push('/Trivia');
   };
 
   render() {
